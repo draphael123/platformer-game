@@ -1,7 +1,7 @@
 {
   "name": "ugly-mario-platformer",
   "version": "1.0.0",
-  "description": "Ugly Mario - A fun platformer game with 100 levels",
+  "description": "Ugly Platformer - A fun platformer game with 100 levels",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -1,4 +1,4 @@
-# Ugly Mario - Platformer Game
+# Ugly Platformer - Platformer Game
 
 A fun platformer game with 100 levels, 6 ugly heroes, 10 worlds, and actual music!
 
@@ -26,7 +26,7 @@ To deploy to GitHub Pages:
 
 2. **Commit and push**:
    ```
-   git commit -m "Initial commit: Ugly Mario platformer"
+   git commit -m "Initial commit: Ugly Platformer"
    git branch -M main
    git remote add origin https://github.com/YOUR_USERNAME/ugly-mario-platformer.git
    git push -u origin main
