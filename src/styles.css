@@ -1,0 +1,37 @@
+/* Ugly Platformer - Anti-AI-Slop Aesthetic */
+/* Scrappy, bootleg arcade, worn game manual vibes */
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #120e0b;
+  color: #e8e0d8;
+  font-family: 'JetBrains Mono', 'Consolas', monospace;
+}
+
+/* Noise overlay - adds grit, breaks up smooth gradients */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Main content wrapper */
+#root {
+  min-height: 100vh;
+}
+
+/* Font classes for use in components */
+.font-title { font-family: 'Bungee', Impact, sans-serif; }
+.font-pixel { font-family: 'Silkscreen', 'Courier New', monospace; }
+.font-ui { font-family: 'JetBrains Mono', 'Consolas', monospace; }
+
+/* Button press effect */
+button:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 #000 !important;
+}

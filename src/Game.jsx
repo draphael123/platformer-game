@@ -1006,6 +1006,11 @@ export default function Game() {
   const [customSeed,setCustomSeed] = useState("");
   const [selectedWorld,setSelectedWorld] = useState(0);
   const [selectedBoss,setSelectedBoss] = useState(null);
+  const [fullscreen,setFullscreen] = useState(false);
+  const toggleFullscreen = useCallback(()=>{
+    if(!document.fullscreenElement){ canvasRef.current?.requestFullscreen?.(); setFullscreen(true); }
+    else{ document.exitFullscreen?.(); setFullscreen(false); }
+  },[]);
   const gsRef = useRef({
     player:{x:0,y:0,vx:0,vy:0,right:true,frame:0,grounded:false,invincible:0},
     camera:{x:0}, keys:{},
@@ -1835,61 +1840,61 @@ export default function Game() {
   if(screen==="menu"){
     if(showOptions){
       return(<div style={getMc(options.menuTheme)}><div style={{...mi,maxWidth:480}}>
-        <h2 style={{fontFamily:"monospace",color:"#f1c40f",fontSize:24,margin:"0 0 16px 0"}}>⚙️ OPTIONS</h2>
+        <h2 style={{fontFamily:"'Bungee', Impact, sans-serif",color:"#d4a84b",fontSize:22,margin:"0 0 16px 0"}}>OPTIONS</h2>
         <div style={{display:"flex",flexDirection:"column",gap:12,marginBottom:20,textAlign:"left"}}>
-          <label style={{fontFamily:"monospace",color:"#fff",display:"flex",alignItems:"center",gap:12}}>
+          <label style={{fontFamily:"'JetBrains Mono', monospace",color:"#fff",display:"flex",alignItems:"center",gap:12}}>
             <input type="checkbox" checked={options.practiceMode} onChange={e=>setOpt("practiceMode",e.target.checked)} />
             Practice Mode (infinite lives)
           </label>
-          <label style={{fontFamily:"monospace",color:"#fff",display:"flex",alignItems:"center",gap:12}}>
+          <label style={{fontFamily:"'JetBrains Mono', monospace",color:"#fff",display:"flex",alignItems:"center",gap:12}}>
             <input type="checkbox" checked={options.hazardsOff} onChange={e=>setOpt("hazardsOff",e.target.checked)} />
             Hazards Off
           </label>
-          <label style={{fontFamily:"monospace",color:"#fff",display:"flex",alignItems:"center",gap:12}}>
+          <label style={{fontFamily:"'JetBrains Mono', monospace",color:"#fff",display:"flex",alignItems:"center",gap:12}}>
             <input type="checkbox" checked={options.screenShake} onChange={e=>setOpt("screenShake",e.target.checked)} />
             Screen Shake
           </label>
-          <label style={{fontFamily:"monospace",color:"#fff",display:"flex",alignItems:"center",gap:12}}>
+          <label style={{fontFamily:"'JetBrains Mono', monospace",color:"#fff",display:"flex",alignItems:"center",gap:12}}>
             <input type="checkbox" checked={options.easyBoss} onChange={e=>setOpt("easyBoss",e.target.checked)} />
             Easy Bosses
           </label>
-          <div style={{fontFamily:"monospace",color:"#aaa"}}>Particle Density</div>
+          <div style={{fontFamily:"'JetBrains Mono', monospace",color:"#aaa"}}>Particle Density</div>
           <div style={{display:"flex",gap:8}}>
-            {["low","medium","high"].map(p=>(<button key={p} onClick={()=>setOpt("particleDensity",p)} style={{...mb(options.particleDensity===p?"#2ecc71":"#555"),padding:"8px 12px",fontSize:12}}>{p.toUpperCase()}</button>))}
+            {["low","medium","high"].map(p=>(<button key={p} onClick={()=>setOpt("particleDensity",p)} style={{...mb(options.particleDensity===p?"#4a7a4a":"#4a4540"),padding:"8px 12px",fontSize:12}}>{p.toUpperCase()}</button>))}
           </div>
-          <div style={{fontFamily:"monospace",color:"#aaa"}}>Music Volume</div>
+          <div style={{fontFamily:"'JetBrains Mono', monospace",color:"#aaa"}}>Music Volume</div>
           <input type="range" min={0} max={100} value={(options.musicVol||1)*100} onChange={e=>setOpt("musicVol",e.target.value/100)} style={{width:"100%"}} />
-          <div style={{fontFamily:"monospace",color:"#aaa"}}>SFX Volume</div>
+          <div style={{fontFamily:"'JetBrains Mono', monospace",color:"#aaa"}}>SFX Volume</div>
           <input type="range" min={0} max={100} value={(options.sfxVol||1)*100} onChange={e=>setOpt("sfxVol",e.target.value/100)} style={{width:"100%"}} />
-          <label style={{fontFamily:"monospace",color:"#fff",display:"flex",alignItems:"center",gap:12}}>
+          <label style={{fontFamily:"'JetBrains Mono', monospace",color:"#fff",display:"flex",alignItems:"center",gap:12}}>
             <input type="checkbox" checked={options.muteMenus} onChange={e=>setOpt("muteMenus",e.target.checked)} />
             Mute during menus
           </label>
-          <div style={{fontFamily:"monospace",color:"#aaa"}}>Colorblind Mode</div>
+          <div style={{fontFamily:"'JetBrains Mono', monospace",color:"#aaa"}}>Colorblind Mode</div>
           <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-            {["none","protanopia","deuteranopia","tritanopia"].map(c=>(<button key={c} onClick={()=>setOpt("colorblind",c)} style={{...mb(options.colorblind===c?"#2ecc71":"#555"),padding:"6px 10px",fontSize:11}}>{c.toUpperCase()}</button>))}
+            {["none","protanopia","deuteranopia","tritanopia"].map(c=>(<button key={c} onClick={()=>setOpt("colorblind",c)} style={{...mb(options.colorblind===c?"#4a7a4a":"#4a4540"),padding:"6px 10px",fontSize:11}}>{c.toUpperCase()}</button>))}
           </div>
-          <div style={{fontFamily:"monospace",color:"#aaa"}}>Theme Override</div>
+          <div style={{fontFamily:"'JetBrains Mono', monospace",color:"#aaa"}}>Theme Override</div>
           <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-            {["auto","grassland","cave","lava","snow"].map(t=>(<button key={t} onClick={()=>setOpt("themeOverride",t)} style={{...mb(options.themeOverride===t?"#2ecc71":"#555"),padding:"6px 10px",fontSize:11}}>{t}</button>))}
+            {["auto","grassland","cave","lava","snow"].map(t=>(<button key={t} onClick={()=>setOpt("themeOverride",t)} style={{...mb(options.themeOverride===t?"#4a7a4a":"#4a4540"),padding:"6px 10px",fontSize:11}}>{t}</button>))}
           </div>
-          <label style={{fontFamily:"monospace",color:"#fff",display:"flex",alignItems:"center",gap:12}}>
+          <label style={{fontFamily:"'JetBrains Mono', monospace",color:"#fff",display:"flex",alignItems:"center",gap:12}}>
             <input type="checkbox" checked={options.retroMode} onChange={e=>setOpt("retroMode",e.target.checked)} />
             Retro Mode (simpler graphics)
           </label>
-          <div style={{fontFamily:"monospace",color:"#aaa"}}>Menu Theme</div>
+          <div style={{fontFamily:"'JetBrains Mono', monospace",color:"#aaa"}}>Menu Theme</div>
           <div style={{display:"flex",gap:8}}>
-            {["dark","light","colorful"].map(m=>(<button key={m} onClick={()=>setOpt("menuTheme",m)} style={{...mb(options.menuTheme===m?"#2ecc71":"#555"),padding:"6px 12px",fontSize:12}}>{m.toUpperCase()}</button>))}
+            {["dark","light","colorful"].map(m=>(<button key={m} onClick={()=>setOpt("menuTheme",m)} style={{...mb(options.menuTheme===m?"#4a7a4a":"#4a4540"),padding:"6px 12px",fontSize:12}}>{m.toUpperCase()}</button>))}
           </div>
         </div>
-        <button onClick={()=>{setShowOptions(false);saveOpt();}} style={mb("#7f8c8d")}>← Back</button>
+        <button onClick={()=>{setShowOptions(false);saveOpt();}} style={mb("#5a554a")}>← Back</button>
       </div></div>);
     }
     if(showStats){
       const st=loadSave().stats||{playTime:0,deaths:0,levelsCompleted:0};
       return(<div style={getMc(options.menuTheme)}><div style={{...mi,maxWidth:400}}>
-        <h2 style={{fontFamily:"monospace",color:"#f1c40f",fontSize:24,margin:"0 0 16px 0"}}>📊 STATISTICS</h2>
-        <div style={{fontFamily:"monospace",color:"#fff",textAlign:"left",lineHeight:2}}>
+        <h2 style={{fontFamily:"'Bungee', Impact, sans-serif",color:"#d4a84b",fontSize:22,margin:"0 0 16px 0"}}>STATISTICS</h2>
+        <div style={{fontFamily:"'JetBrains Mono', monospace",color:"#fff",textAlign:"left",lineHeight:2}}>
           <div>Play Time: {Math.floor(st.playTime/60)}m</div>
           <div>Deaths: {st.deaths}</div>
           <div>Levels Completed: {st.levelsCompleted}</div>
@@ -1897,26 +1902,26 @@ export default function Game() {
           <div>Stomps: {loadSave().achievements?.stomps||0}</div>
           <div>Bosses: {loadSave().achievements?.bosses||0}</div>
         </div>
-        <button onClick={()=>setShowStats(false)} style={{...mb("#7f8c8d"),marginTop:20}}>← Back</button>
+        <button onClick={()=>setShowStats(false)} style={{...mb("#5a554a"),marginTop:20}}>← Back</button>
       </div></div>);
     }
     if(showCredits){
       return(<div style={getMc(options.menuTheme)}><div style={{...mi,maxWidth:450}}>
-        <h2 style={{fontFamily:"monospace",color:"#f1c40f",fontSize:24,margin:"0 0 16px 0"}}>CREDITS</h2>
-        <div style={{fontFamily:"monospace",color:"#aaa",textAlign:"left",lineHeight:2}}>
+        <h2 style={{fontFamily:"'Bungee', Impact, sans-serif",color:"#d4a84b",fontSize:22,margin:"0 0 16px 0"}}>CREDITS</h2>
+        <div style={{fontFamily:"'JetBrains Mono', monospace",color:"#aaa",textAlign:"left",lineHeight:2}}>
           <div><strong style={{color:"#fff"}}>Ugly Platformer</strong></div>
           <div>100 levels • 6 heroes • bosses • collectables • power-ups • checkpoints</div>
           <div style={{marginTop:16}}>Built with React, Vite, Tone.js</div>
           <div>Canvas-based platformer with procedurally generated levels</div>
           <div style={{marginTop:16,color:"#666"}}>© 2025</div>
         </div>
-        <button onClick={()=>setShowCredits(false)} style={{...mb("#7f8c8d"),marginTop:20}}>← Back</button>
+        <button onClick={()=>setShowCredits(false)} style={{...mb("#5a554a"),marginTop:20}}>← Back</button>
       </div></div>);
     }
     if(showTutorial){
       return(<div style={getMc(options.menuTheme)}><div style={{...mi,maxWidth:500,textAlign:"left"}}>
-        <h2 style={{fontFamily:"monospace",color:"#f1c40f",fontSize:24,margin:"0 0 16px 0",textAlign:"center"}}>HOW TO PLAY</h2>
-        <div style={{fontFamily:"monospace",color:"#aaa",lineHeight:1.9}}>
+        <h2 style={{fontFamily:"'Bungee', Impact, sans-serif",color:"#d4a84b",fontSize:22,margin:"0 0 16px 0",textAlign:"center"}}>HOW TO PLAY</h2>
+        <div style={{fontFamily:"'JetBrains Mono', monospace",color:"#aaa",lineHeight:1.9}}>
           <div><strong style={{color:"#fff"}}>Controls:</strong> Arrow keys / WASD to move, Space to jump</div>
           <div><strong style={{color:"#fff"}}>Goal:</strong> Collect the level item (key/star/gem/crown), defeat the boss, reach the flag</div>
           <div><strong style={{color:"#fff"}}>Stomp:</strong> Jump on enemies from above to defeat them</div>
@@ -1925,71 +1930,71 @@ export default function Game() {
           <div><strong style={{color:"#fff"}}>Breakable walls:</strong> Stomp to break secret walls</div>
           <div><strong style={{color:"#e74c3c"}}>Hazards:</strong> Spikes, lava, saw blades, lasers, crushers, acid, steam, mines, thorns, electric</div>
         </div>
-        <button onClick={()=>setShowTutorial(false)} style={{...mb("#7f8c8d"),marginTop:20,width:"100%"}}>← Back</button>
+        <button onClick={()=>setShowTutorial(false)} style={{...mb("#5a554a"),marginTop:20,width:"100%"}}>← Back</button>
       </div></div>);
     }
     if(showDailyChallenge){
       const seed=getDailySeed();
       return(<div style={getMc(options.menuTheme)}><div style={mi}>
-        <h2 style={{fontFamily:"monospace",color:"#f1c40f",fontSize:24,margin:"0 0 8px 0"}}>📅 DAILY CHALLENGE</h2>
-        <p style={{fontFamily:"monospace",color:"#aaa",fontSize:14,margin:"0 0 20px 0"}}>Today's seed: {seed}</p>
-        <p style={{fontFamily:"monospace",color:"#888",fontSize:12,margin:"0 0 20px 0"}}>Same level layout for everyone today. How far can you go?</p>
-        <button onClick={async()=>{await startAudio();initLevel(0,selChar,false,{customSeed:seed,dailyChallenge:true});}} style={mb("#2ecc71")}>Play Daily Challenge</button>
-        <button onClick={()=>setShowDailyChallenge(false)} style={mb("#7f8c8d")}>← Back</button>
+        <h2 style={{fontFamily:"'Bungee', Impact, sans-serif",color:"#d4a84b",fontSize:22,margin:"0 0 8px 0"}}>DAILY CHALLENGE</h2>
+        <p style={{fontFamily:"'JetBrains Mono', monospace",color:"#aaa",fontSize:14,margin:"0 0 20px 0"}}>Today's seed: {seed}</p>
+        <p style={{fontFamily:"'JetBrains Mono', monospace",color:"#888",fontSize:12,margin:"0 0 20px 0"}}>Same level layout for everyone today. How far can you go?</p>
+        <button onClick={async()=>{await startAudio();initLevel(0,selChar,false,{customSeed:seed,dailyChallenge:true});}} style={mb("#4a7a4a")}>Play Daily Challenge</button>
+        <button onClick={()=>setShowDailyChallenge(false)} style={mb("#5a554a")}>← Back</button>
       </div></div>);
     }
     if(showSeedInput){
       return(<div style={getMc(options.menuTheme)}><div style={mi}>
-        <h2 style={{fontFamily:"monospace",color:"#f1c40f",fontSize:24,margin:"0 0 16px 0"}}>🎲 CUSTOM SEED</h2>
-        <p style={{fontFamily:"monospace",color:"#aaa",fontSize:12,margin:"0 0 8px 0"}}>Enter a seed (number or text) to play a specific level layout</p>
-        <input type="text" value={customSeed} onChange={e=>setCustomSeed(e.target.value)} placeholder="e.g. 12345 or ABC" style={{fontFamily:"monospace",padding:12,width:"100%",maxWidth:200,marginBottom:16,borderRadius:8,border:"2px solid #444",background:"#222",color:"#fff"}} />
+        <h2 style={{fontFamily:"'Bungee', Impact, sans-serif",color:"#d4a84b",fontSize:22,margin:"0 0 16px 0"}}>CUSTOM SEED</h2>
+        <p style={{fontFamily:"'JetBrains Mono', monospace",color:"#aaa",fontSize:12,margin:"0 0 8px 0"}}>Enter a seed (number or text) to play a specific level layout</p>
+        <input type="text" value={customSeed} onChange={e=>setCustomSeed(e.target.value)} placeholder="e.g. 12345 or ABC" style={{fontFamily:"'JetBrains Mono', monospace",padding:12,width:"100%",maxWidth:200,marginBottom:16,borderRadius:0,border:"2px solid #2a2520",background:"#1a1815",color:"#e8e0d8"}} />
         <div style={{display:"flex",gap:8,flexDirection:"column"}}>
-          <button onClick={async()=>{if(customSeed.trim()){await startAudio();setScreen("playing");initLevel(0,selChar,false,{customSeed:customSeed.trim()});}}} style={mb("#2ecc71")}>Play with seed</button>
-          <button onClick={()=>setShowSeedInput(false)} style={mb("#7f8c8d")}>← Back</button>
+          <button onClick={async()=>{if(customSeed.trim()){await startAudio();setScreen("playing");initLevel(0,selChar,false,{customSeed:customSeed.trim()});}}} style={mb("#4a7a4a")}>Play with seed</button>
+          <button onClick={()=>setShowSeedInput(false)} style={mb("#5a554a")}>← Back</button>
         </div>
       </div></div>);
     }
     if(showAchievements){
       const ach=loadSave().achievements||{};
       return(<div style={getMc(options.menuTheme)}><div style={{...mi,maxWidth:400}}>
-        <h2 style={{fontFamily:"monospace",color:"#f1c40f",fontSize:24,margin:"0 0 16px 0"}}>🏆 ACHIEVEMENTS</h2>
+        <h2 style={{fontFamily:"'Bungee', Impact, sans-serif",color:"#d4a84b",fontSize:22,margin:"0 0 16px 0"}}>ACHIEVEMENTS</h2>
         <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:20}}>
           {ACHIEVEMENTS.map(a=>{ const done=a.check(ach); return(
-            <div key={a.id} style={{background:done?"#2a4a2a":"#2a2a2a",padding:"10px 14px",borderRadius:8,border:`1px solid ${done?"#2ecc71":"#444"}`}}>
-              <span style={{color:done?"#2ecc71":"#888",fontSize:18,marginRight:8}}>{done?"✓":"○"}</span>
-              <span style={{fontFamily:"monospace",color:done?"#fff":"#888",fontWeight:"bold"}}>{a.name}</span>
-              <div style={{fontFamily:"monospace",color:"#aaa",fontSize:11,marginTop:4,marginLeft:26}}>{a.desc}</div>
+            <div key={a.id} style={{background:done?"#1a2a1a":"#1a1a1a",padding:"10px 14px",borderRadius:0,border:`2px solid ${done?"#4a7a4a":"#3a3a3a"}`}}>
+              <span style={{color:done?"#4a7a4a":"#6a6a6a",fontSize:18,marginRight:8}}>{done?"✓":"○"}</span>
+              <span style={{fontFamily:"'JetBrains Mono', monospace",color:done?"#fff":"#888",fontWeight:"bold"}}>{a.name}</span>
+              <div style={{fontFamily:"'JetBrains Mono', monospace",color:"#aaa",fontSize:11,marginTop:4,marginLeft:26}}>{a.desc}</div>
             </div>
           );})}
         </div>
-        <button onClick={()=>setShowAchievements(false)} style={mb("#7f8c8d")}>← Back</button>
+        <button onClick={()=>setShowAchievements(false)} style={mb("#5a554a")}>← Back</button>
       </div></div>);
     }
     return(<div style={getMc(options.menuTheme)}><div style={mi}>
-      <h1 style={{fontFamily:"monospace",fontSize:52,color:"#e74c3c",textShadow:"3px 3px 0 #000,-1px -1px 0 #000",margin:"0 0 4px 0"}}>UGLY PLATFORMER</h1>
-      <p style={{fontFamily:"monospace",color:"#f1c40f",fontSize:14,margin:"0 0 24px 0"}}>100 levels • 6 heroes • checkpoints • power-ups • achievements</p>
+      <h1 style={{fontFamily:"'Bungee', Impact, sans-serif",fontSize:48,color:"#d4a84b",textShadow:"4px 4px 0 #4a2a0a, 2px 2px 0 #000",margin:"0 0 4px 0",letterSpacing:2}}>UGLY PLATFORMER</h1>
+      <p style={{fontFamily:"'JetBrains Mono', monospace",color:"#8a7a6a",fontSize:12,margin:"0 0 24px 0",textTransform:"uppercase",letterSpacing:3}}>100 levels • 6 heroes • checkpoints • power-ups • achievements</p>
       <canvas ref={canvasRef} width={120} height={80} style={{display:"none"}} />
       <div style={{marginBottom:16}}>
-        <div style={{fontFamily:"monospace",color:"#aaa",fontSize:12,marginBottom:6}}>Difficulty</div>
+        <div style={{fontFamily:"'JetBrains Mono', monospace",color:"#aaa",fontSize:12,marginBottom:6}}>Difficulty</div>
         <div style={{display:"flex",gap:8}}>
-          {["easy","normal","hard"].map(d=>(<button key={d} onClick={()=>setDiff(d)} style={{...mb(difficulty===d?"#2ecc71":"#555"),padding:"8px 16px",fontSize:14}}>{d.toUpperCase()}</button>))}
+          {["easy","normal","hard"].map(d=>(<button key={d} onClick={()=>setDiff(d)} style={{...mb(difficulty===d?"#4a7a4a":"#4a4540"),padding:"8px 16px",fontSize:14}}>{d.toUpperCase()}</button>))}
         </div>
       </div>
       <div style={{display:"flex",flexDirection:"column",gap:12,width:280}}>
-        <button onClick={async()=>{await startAudio();setScreen("charSelect");setRunMode(false);}} style={mb("#e74c3c")}>🎮 START GAME</button>
-        <button onClick={async()=>{await startAudio();setScreen("charSelect");setRunMode(true);}} style={mb("#9b59b6")}>🏃 RUN (reach Lv 20)</button>
-        <button onClick={async()=>{await startAudio();setScreen("levelSelect");setSelectedWorld(0);}} style={mb("#3498db")}>📋 LEVEL SELECT</button>
-        <button onClick={()=>setShowDailyChallenge(true)} style={mb("#1abc9c")}>📅 Daily Challenge</button>
-        <button onClick={()=>setShowSeedInput(true)} style={mb("#8e44ad")}>🎲 Custom Seed</button>
-        <button onClick={()=>setShowAchievements(true)} style={mb("#f39c12")}>🏆 Achievements</button>
-        <button onClick={()=>setShowStats(true)} style={mb("#95a5a6")}>📊 Statistics</button>
-        <button onClick={()=>setShowOptions(true)} style={mb("#7f8c8d")}>⚙️ Options</button>
-        <button onClick={()=>setShowCredits(true)} style={mb("#555")}>Credits</button>
-        <button onClick={()=>setShowTutorial(true)} style={mb("#555")}>❓ How to Play</button>
-        <button onClick={toggleSound} style={mb("#555")}>{soundOn?"🔊 Sound ON":"🔇 Sound OFF"}</button>
+        <button onClick={async()=>{await startAudio();setScreen("charSelect");setRunMode(false);}} style={mb("#c44a3a")}>START GAME</button>
+        <button onClick={async()=>{await startAudio();setScreen("charSelect");setRunMode(true);}} style={mb("#6b4a7a")}>RUN (reach Lv 20)</button>
+        <button onClick={async()=>{await startAudio();setScreen("levelSelect");setSelectedWorld(0);}} style={mb("#4a6a8a")}>LEVEL SELECT</button>
+        <button onClick={()=>setShowDailyChallenge(true)} style={mb("#3a6a5a")}>Daily Challenge</button>
+        <button onClick={()=>setShowSeedInput(true)} style={mb("#5a4a6a")}>Custom Seed</button>
+        <button onClick={()=>setShowAchievements(true)} style={mb("#a67a2a")}>Achievements</button>
+        <button onClick={()=>setShowStats(true)} style={mb("#5a5a5a")}>Statistics</button>
+        <button onClick={()=>setShowOptions(true)} style={mb("#4a4a4a")}>Options</button>
+        <button onClick={()=>setShowCredits(true)} style={mb("#3a3a3a")}>Credits</button>
+        <button onClick={()=>setShowTutorial(true)} style={mb("#3a3a3a")}>How to Play</button>
+        <button onClick={toggleSound} style={mb("#3a3a3a")}>{soundOn?"Sound ON":"Sound OFF"}</button>
       </div>
-      <p style={{fontFamily:"monospace",color:"#666",fontSize:11,marginTop:20}}>Arrow keys / WASD + Space to jump • Stomp enemies from above</p>
-      <div style={{fontFamily:"monospace",color:"#555",fontSize:10,marginTop:8,lineHeight:1.6}}>
+      <p style={{fontFamily:"'JetBrains Mono', monospace",color:"#5a524a",fontSize:10,marginTop:20,textTransform:"uppercase",letterSpacing:1}}>Arrow keys / WASD + Space to jump • Stomp enemies from above</p>
+      <div style={{fontFamily:"'JetBrains Mono', monospace",color:"#4a4540",fontSize:9,marginTop:8,lineHeight:1.7}}>
         <span style={{color:"#e74c3c"}}>⚠ Hazards:</span> Spikes, Lava, Saw Blades, Wind Zones, Falling Platforms<br/>
         <span style={{color:"#f39c12"}}>👾 Enemies:</span> Walkers, Speedsters, Flyers, Jumpers, Chargers, Slimes, Tanks, Turrets<br/>
         <span style={{color:"#9b59b6"}}> Collect level item + defeat boss → reach flag</span>
@@ -1999,18 +2004,18 @@ export default function Game() {
 
   if(screen==="charSelect"){
     return(<div style={getMc(options.menuTheme)}><div style={mi}>
-      <h2 style={{fontFamily:"monospace",color:"#f1c40f",fontSize:28,margin:"0 0 20px 0",textShadow:"2px 2px 0 #000"}}>CHOOSE YOUR UGLY</h2>
+      <h2 style={{fontFamily:"'Bungee', Impact, sans-serif",color:"#d4a84b",fontSize:24,margin:"0 0 20px 0",textShadow:"2px 2px 0 #2a1a0a"}}>CHOOSE YOUR UGLY</h2>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12,marginBottom:20}}>
-        {CHARS.map((ch,i)=>(<button key={i} onClick={()=>setSelChar(i)} style={{background:selChar===i?"#444":"#222",border:selChar===i?"3px solid #f1c40f":"3px solid #333",borderRadius:12,padding:"14px 8px",cursor:"pointer",transition:"all 0.15s"}}>
+        {CHARS.map((ch,i)=>(<button key={i} onClick={()=>setSelChar(i)} style={{background:selChar===i?"#3a3530":"#1a1815",border:selChar===i?"3px solid #d4a84b":"3px solid #2a2520",borderRadius:0,padding:"14px 8px",cursor:"pointer",transition:"all 0.1s",boxShadow:selChar===i?"2px 2px 0 #2a1a0a":"none"}}>
           <CP ci={i} />
-          <div style={{fontFamily:"monospace",color:selChar===i?"#f1c40f":"#aaa",fontSize:11,marginTop:6,fontWeight:"bold"}}>{ch.name}</div>
-          <div style={{fontFamily:"monospace",color:"#2ecc71",fontSize:8,marginTop:2}}>Ability: {ch.ability}</div>
-          <div style={{fontFamily:"monospace",color:"#666",fontSize:9,marginTop:1}}>{ch.desc}</div>
+          <div style={{fontFamily:"'JetBrains Mono', monospace",color:selChar===i?"#d4a84b":"#8a7a6a",fontSize:11,marginTop:6,fontWeight:"bold"}}>{ch.name}</div>
+          <div style={{fontFamily:"'JetBrains Mono', monospace",color:"#4a7a4a",fontSize:8,marginTop:2}}>Ability: {ch.ability}</div>
+          <div style={{fontFamily:"'JetBrains Mono', monospace",color:"#5a524a",fontSize:9,marginTop:1}}>{ch.desc}</div>
         </button>))}
       </div>
       <div style={{display:"flex",gap:12}}>
-        <button onClick={()=>setScreen("menu")} style={mb("#7f8c8d")}>← Back</button>
-        <button onClick={()=>initLevel(0,selChar)} style={mb("#2ecc71")}>Play as {CHARS[selChar].name} →</button>
+        <button onClick={()=>setScreen("menu")} style={mb("#5a554a")}>← Back</button>
+        <button onClick={()=>initLevel(0,selChar)} style={mb("#4a7a4a")}>Play as {CHARS[selChar].name} →</button>
       </div>
     </div></div>);
   }
@@ -2021,49 +2026,44 @@ export default function Game() {
     const bossTypes=["blob","beast","skeleton","golem","phantom","titan"];
     const worldLevels=Array.from({length:10},(_,i)=>selectedWorld*10+i).filter(i=>i<100);
     return(<div style={getMc(options.menuTheme)}><div style={{...mi,maxWidth:720}}>
-      <h2 style={{fontFamily:"monospace",color:"#f1c40f",fontSize:26,margin:"0 0 12px 0",textShadow:"2px 2px 0 #000"}}>LEVEL SELECT</h2>
+      <h2 style={{fontFamily:"'Bungee', Impact, sans-serif",color:"#d4a84b",fontSize:24,margin:"0 0 12px 0",textShadow:"2px 2px 0 #2a1a0a"}}>LEVEL SELECT</h2>
       <div style={{marginBottom:16}}>
-        <div style={{fontFamily:"monospace",color:"#aaa",fontSize:12,marginBottom:6}}>WORLD</div>
+        <div style={{fontFamily:"'JetBrains Mono', monospace",color:"#aaa",fontSize:12,marginBottom:6}}>WORLD</div>
         <div style={{display:"flex",gap:6,flexWrap:"wrap",justifyContent:"center"}}>
           {Array.from({length:10},(_,w)=>(
-            <button key={w} onClick={()=>setSelectedWorld(w)} style={{...mb(selectedWorld===w?"#2ecc71":"#555"),padding:"8px 14px",fontSize:13,width:"auto"}}>World {w+1}</button>
+            <button key={w} onClick={()=>setSelectedWorld(w)} style={{...mb(selectedWorld===w?"#4a7a4a":"#4a4540"),padding:"8px 14px",fontSize:13,width:"auto"}}>World {w+1}</button>
           ))}
         </div>
       </div>
       <div style={{marginBottom:16}}>
-        <div style={{fontFamily:"monospace",color:"#aaa",fontSize:12,marginBottom:6}}>BOSS (optional)</div>
+        <div style={{fontFamily:"'JetBrains Mono', monospace",color:"#aaa",fontSize:12,marginBottom:6}}>BOSS (optional)</div>
         <div style={{display:"flex",gap:6,flexWrap:"wrap",justifyContent:"center"}}>
-          <button onClick={()=>setSelectedBoss(null)} style={{...mb(selectedBoss===null?"#e74c3c":"#555"),padding:"6px 10px",fontSize:11,width:"auto"}}>Default</button>
+          <button onClick={()=>setSelectedBoss(null)} style={{...mb(selectedBoss===null?"#c44a3a":"#4a4540"),padding:"6px 10px",fontSize:11,width:"auto"}}>Default</button>
           {bossTypes.map(b=>(
-            <button key={b} onClick={()=>setSelectedBoss(b)} style={{...mb(selectedBoss===b?"#e74c3c":"#555"),padding:"6px 10px",fontSize:11,width:"auto"}}>{b}</button>
+            <button key={b} onClick={()=>setSelectedBoss(b)} style={{...mb(selectedBoss===b?"#c44a3a":"#4a4540"),padding:"6px 10px",fontSize:11,width:"auto"}}>{b}</button>
           ))}
         </div>
       </div>
-      <div style={{fontFamily:"monospace",color:"#888",fontSize:11,marginBottom:12}}>World {selectedWorld+1} • Levels {selectedWorld*10+1}-{selectedWorld*10+worldLevels.length}</div>
+      <div style={{fontFamily:"'JetBrains Mono', monospace",color:"#888",fontSize:11,marginBottom:12}}>World {selectedWorld+1} • Levels {selectedWorld*10+1}-{selectedWorld*10+worldLevels.length}</div>
       <div style={{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:8,marginBottom:16}}>
         {worldLevels.map(idx=>{const t=tn[idx%10];return(
-          <button key={idx} onClick={()=>initLevel(idx,selChar,false,{bossType:selectedBoss||undefined})} style={{background:"#333",border:"2px solid #555",borderRadius:8,padding:"10px 4px",cursor:"pointer",transition:"all 0.15s"}}>
+          <button key={idx} onClick={()=>initLevel(idx,selChar,false,{bossType:selectedBoss||undefined})} style={{background:"#2a2520",border:"2px solid #3a3530",borderRadius:0,padding:"10px 4px",cursor:"pointer",transition:"all 0.1s",boxShadow:"2px 2px 0 #1a1510"}}>
             <div style={{fontSize:18}}>{te[t]}</div>
-            <div style={{fontFamily:"monospace",color:"#fff",fontSize:12,fontWeight:"bold"}}>{idx+1}</div>
-            <div style={{fontFamily:"monospace",color:"#888",fontSize:9}}>{t}</div>
+            <div style={{fontFamily:"'JetBrains Mono', monospace",color:"#e8e0d8",fontSize:12,fontWeight:"bold"}}>{idx+1}</div>
+            <div style={{fontFamily:"'JetBrains Mono', monospace",color:"#6a625a",fontSize:9}}>{t}</div>
           </button>);})}
       </div>
-      <button onClick={()=>setScreen("menu")} style={mb("#7f8c8d")}>← Back to Menu</button>
+      <button onClick={()=>setScreen("menu")} style={mb("#5a554a")}>← Back to Menu</button>
     </div></div>);
   }
 
-  const [fullscreen,setFullscreen] = useState(false);
-  const toggleFullscreen = useCallback(()=>{
-    if(!document.fullscreenElement){ canvasRef.current?.requestFullscreen?.(); setFullscreen(true); }
-    else{ document.exitFullscreen?.(); setFullscreen(false); }
-  },[]);
-  return(<div style={{display:"flex",flexDirection:"column",alignItems:"center",background:"#0a0a1a",minHeight:"100vh",padding:"4px 0"}}>
-    <canvas ref={canvasRef} width={CW} height={CH} style={{border:"3px solid #333",borderRadius:8,maxWidth:"100%",background:"#000"}} tabIndex={0} />
+  return(<div style={{display:"flex",flexDirection:"column",alignItems:"center",background:"#0f0c0a",minHeight:"100vh",padding:"8px 0"}}>
+    <canvas ref={canvasRef} width={CW} height={CH} style={{border:"4px solid #2a2520",borderRadius:0,maxWidth:"100%",background:"#000",boxShadow:"4px 4px 0 #1a1510"}} tabIndex={0} />
     <div style={{display:"flex",gap:10,marginTop:8,userSelect:"none",flexWrap:"wrap"}}>
       <button onPointerDown={()=>press("ArrowLeft")} onPointerUp={()=>release("ArrowLeft")} onPointerLeave={()=>release("ArrowLeft")} style={cb}>◀</button>
       <button onPointerDown={()=>press("ArrowRight")} onPointerUp={()=>release("ArrowRight")} onPointerLeave={()=>release("ArrowRight")} style={cb}>▶</button>
       <div style={{width:16}} />
-      <button onPointerDown={()=>tapSpace()} style={{...cb,width:90,background:"#c0392b"}}>JUMP</button>
+      <button onPointerDown={()=>tapSpace()} style={{...cb,width:90,background:"#c44a3a"}}>JUMP</button>
       <button onClick={()=>{audioRef.current.stopMusic();setScreen("menu");}} style={{...cb,width:70,background:"#555",fontSize:12}}>MENU</button>
       <button onClick={toggleFullscreen} style={{...cb,width:50,background:"#333",fontSize:14}} title="Fullscreen">{fullscreen?"⤢":"⛶"}</button>
       <button onClick={toggleSound} style={{...cb,width:50,background:"#333",fontSize:16}}>{soundOn?"🔊":"🔇"}</button>
@@ -2074,10 +2074,13 @@ export default function Game() {
 function CP({ci}){const ref=useRef(null);useEffect(()=>{const c=ref.current;if(!c)return;const ctx=c.getContext("2d");ctx.clearRect(0,0,60,70);drawChar(ctx,15,12,PW,PH,ci,true,0,false,1);},[ci]);return<canvas ref={ref} width={60} height={70} style={{imageRendering:"auto"}} />;}
 
 const getMc=(menuTheme="dark")=>{
-  const bgs={dark:"linear-gradient(180deg,#0a0a2e 0%,#1a1a3e 100%)",light:"linear-gradient(180deg,#e8e8f0 0%,#d0d0e0 100%)",colorful:"linear-gradient(180deg,#2e1a4a 0%,#1a3a5a 50%,#1a4a3a 100%)"};
+  const bgs={
+    dark:"#0f0c0a",
+    light:"linear-gradient(180deg,#2a2520 0%,#1a1815 100%)",
+    colorful:"linear-gradient(135deg,#1a1512 0%,#251a15 50%,#151a18 100%)"
+  };
   return {display:"flex",justifyContent:"center",alignItems:"center",minHeight:"100vh",background:bgs[menuTheme]||bgs.dark,padding:20};
 };
-const mc=getMc();
 const mi={textAlign:"center",maxWidth:520};
-const mb=(bg)=>({fontFamily:"monospace",fontSize:16,fontWeight:"bold",color:"#fff",background:bg,border:"none",borderRadius:10,padding:"14px 24px",cursor:"pointer",transition:"all 0.15s",width:"100%"});
-const cb={width:56,height:56,fontSize:22,border:"none",borderRadius:10,background:"#2c2c3e",color:"#fff",cursor:"pointer",fontWeight:"bold",display:"flex",alignItems:"center",justifyContent:"center",touchAction:"none"};
+const mb=(bg)=>({fontFamily:"'JetBrains Mono', monospace",fontSize:14,fontWeight:700,color:"#fff",background:bg,border:"2px solid #000",borderRadius:2,padding:"14px 24px",cursor:"pointer",transition:"transform 0.08s, box-shadow 0.08s",width:"100%",boxShadow:"3px 3px 0 #000"});
+const cb={width:56,height:56,fontSize:22,border:"3px solid #1a1a1a",borderRadius:0,background:"#3a3530",color:"#fff",cursor:"pointer",fontWeight:"bold",display:"flex",alignItems:"center",justifyContent:"center",touchAction:"none",boxShadow:"2px 2px 0 #1a1a1a"};
