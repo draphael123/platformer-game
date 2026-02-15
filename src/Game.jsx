@@ -940,7 +940,7 @@ export default function Game() {
     for(let i=0;i<nn;i++) gs.particles.push({x,y,vx:(Math.random()-0.5)*8,vy:-Math.random()*6-2,life:25+Math.random()*25,color:col,size:sz||(2+Math.random()*4)});
   },[]);
 
-  const initLevel = useCallback((li,ci,useCheckpoint = false, optsOverride = {})=>{
+  const initLevel = useCallback(async (li,ci,useCheckpoint = false, optsOverride = {})=>{
     const gs=gsRef.current;
     const opts = { customSeed: optsOverride.customSeed ?? (optsOverride.dailyChallenge ? getDailySeed() : null), themeOverride: optsOverride.themeOverride ?? options.themeOverride, easyBoss: optsOverride.easyBoss ?? options.easyBoss };
     const lv=genLevel(li, opts);
@@ -962,8 +962,12 @@ export default function Game() {
     if(lv.powerupPos){ lv.powerupPos.forEach(p=>{ p.collected=false; }); }
     if(lv.breakables){ lv.breakables.forEach(b=>{ b.broken=false; }); }
     setScreen("playing");
-    const s=loadSave(); audioRef.current.setVolumes?.(s.musicVol,s.sfxVol);
-    audioRef.current.startMusic(lv.theme, li);
+    try {
+      if (!audioRef.current?.started) await audioRef.current.start();
+      const s=loadSave(); audioRef.current.setVolumes?.(s.musicVol,s.sfxVol);
+      const theme = (SONGS[lv.theme] ? lv.theme : null) || "grassland";
+      audioRef.current.startMusic(theme, li);
+    } catch (e) { console.warn("Audio init failed:", e); }
   },[difficulty,options]);
 
   const hurtPlayer = useCallback((gs, fromHazard=false)=>{
@@ -1011,6 +1015,7 @@ export default function Game() {
     window.addEventListener("keydown",kd);window.addEventListener("keyup",ku);
 
     const loop=()=>{
+      try {
       const gs=gsRef.current;
       if(!gs.level){animId=requestAnimationFrame(loop);return;}
       const W=CW,H=CH,lv=gs.level;
@@ -1649,6 +1654,7 @@ export default function Game() {
         drawChar(ctx,W/2-15,H/2+40,PW,PH,gs.charIdx,true,gs.fc*0.08,true);ctx.textAlign="left";
       }
       animId=requestAnimationFrame(loop);
+      } catch(e) { console.error("Game loop error:", e); animId=requestAnimationFrame(loop); }
     };
     animId=requestAnimationFrame(loop);
     return()=>{cancelAnimationFrame(animId);window.removeEventListener("keydown",kd);window.removeEventListener("keyup",ku);};
